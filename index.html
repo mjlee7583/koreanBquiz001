@@ -239,7 +239,7 @@
         quizData = [...questionsDB[stageNum]].sort(() => Math.random() - 0.5).slice(0, 20);
     } else {
         // 1, 2단계는 기존처럼 15문제
-        quizData = [...questionsDB[stageNum]].sort(() => Math.random() - 0.5).slice(0, 15);
+        quizData = [...questionsDB[stageNum]].sort(() => Math.random() - 0.5).slice(0, 15);}
         document.querySelectorAll('.stage-badge').forEach((b, i) => {
             b.className = 'stage-badge' + (i+1 < stageNum ? ' cleared' : i+1 === stageNum ? ' active' : '');
         });
