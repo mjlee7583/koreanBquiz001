@@ -234,6 +234,11 @@
         currentStage = stageNum;
         currentIdx = 0;
         score = 0;
+        if (stageNum === 3) {
+        // 3단계는 20문제 랜덤 추출
+        quizData = [...questionsDB[stageNum]].sort(() => Math.random() - 0.5).slice(0, 20);
+    } else {
+        // 1, 2단계는 기존처럼 15문제
         quizData = [...questionsDB[stageNum]].sort(() => Math.random() - 0.5).slice(0, 15);
         document.querySelectorAll('.stage-badge').forEach((b, i) => {
             b.className = 'stage-badge' + (i+1 < stageNum ? ' cleared' : i+1 === stageNum ? ' active' : '');
@@ -322,7 +327,7 @@
         const feedback = document.getElementById("stage-feedback");
         const actionArea = document.getElementById("action-area");
         actionArea.innerHTML = "";
-        const thresholds = { 1: 12, 2: 13, 3: 14 };
+        const thresholds = { 1: 12, 2: 13, 3: 18 };
         const passThreshold = thresholds[currentStage];
         const isPassed = score >= passThreshold; 
 
@@ -337,20 +342,20 @@
         } else {
             if (isPassed) {
                 feedback.innerHTML = `<div class="pass-msg">🏁 마스터 챌린지 최종 성공!</div>
-                                     <p>총 15문제 중 ${score}문제를 맞췄습니다. 당신은 국어 왕!</p>
+                                     <p>총 15문제 중 ${score}문제를 맞췄습니다.<br> 당신은 국어 왕!</p>
                                      <div class="reward-box">
                                         스스로의 힘으로 3개 스테이지를 모두 정복한 사람!<br>
                                         시험 "전"까지 교과서를 들고<br> 민주쌤에게 오시면 선물을 드립니다.<br> (암호:저국어100점이에요) 😊
                                      </div>`;
                 actionArea.innerHTML = `<button class="action-btn btn-next-stage" onclick="location.reload()">처음부터 다시 하기</button>`;
             } else {
-                feedback.innerHTML = `<div class="fail-msg">😢 최종 챌린지 실패 (14문제 이상 필요)</div><p>마지막 단계는 정말 어렵죠? 다시 한 번 도전해보세요!</p>`;
+                feedback.innerHTML = `<div class="fail-msg">😢 최종 챌린지 실패 (18문제 이상 필요)</div><p>마지막 단계는 정말 어렵죠? 다시 한 번 도전해보세요!</p>`;
                 actionArea.innerHTML = `<button class="action-btn btn-retry" onclick="initStage(${currentStage})">마지막 단계 재도전 🔄</button>`;
             }
         }
     }
 
-    alert("📢 민주쌤과 함께하는\n 🍎국어 B💳 최종 마스터 챌린지!\n\n 단계별 문제가 무작위로 제시됩니다.\n STEP 1: 12문제 이상\n STEP 2: 13문제 이상\n STEP 3: 14문제 이상 맞춰야 성공!\n모두 깬 사람에게는 아주 작은 선물이 기다리고 있어요! 🎁");
+    alert("📢 민주쌤과 함께하는\n 🍎국어 B💳 최종 마스터 챌린지!\n\n 단계별 문제가 무작위로 제시됩니다.\n STEP 1: 12문제 이상\n STEP 2: 14문제 이상\n STEP 3: 18문제 이상 맞춰야 성공!\n모두 깬 사람에게는 아주 작은 선물이 기다리고 있어요! 🎁");
     initStage(1);
 </script>
 </body>
