@@ -183,7 +183,7 @@
             { q: "내용 생성하기 단계에서 주로 하는 활동은?", a: ["자료 수집", "목적 정하기", "맞춤법 검사", "개요 작성"], correct: 0, exp: "글의 재료를 모으는 단계입니다." },
             { q: "대상의 특성상 '인과'의 방법이 반드시 필요한 주제는?", a: ["지구 온난화의 원인", "전통 음식 종류", "연필의 구조", "축구와 농구의 차이"], correct: 0, exp: "원인을 밝혀야 하므로 인과가 필요합니다." },
             { q: "설명문의 '끝' 부분을 작성할 때 주의할 점은?", a: ["새로운 정보를 추가하지 않음", "최대한 길고 자세하게 씀", "비유적 표현만 씀", "질문만 하고 흥미를 유발하며 끝냄"], correct: 0, exp: "끝 부분에서는 내용을 마무리해야 합니다." },
-            { q: "대등한 여러 정보를 늘어놓는 방법과 자주 쓰이는 표현은?", a: ["나열 구조 - 첫째, 둘째, 셋째", "순서 구조 - 먼저, 그 다음, 마지막으로", "인과 구조 - 왜냐하면, 따라서", "비교 구조 - 이와 달리, 이와 비슷하게"], correct: 0, exp: "나열할 때 '첫째, 둘째'를 씁니다." },
+            { q: "대등한 여러 정보를 늘어놓는 방법과 자주 쓰이는 표현은?", a: ["나열 구조 - 첫째, 둘째, 셋째", "순서 구조 - 먼저, 그 다음, 마지막으로", "인과 구조 - 왜냐하면, 따라서", "비교 구조 - 이와 비슷하게, 이와 달리"], correct: 0, exp: "나열할 때 '첫째, 둘째'를 씁니다." },
             { q: "적절한 설명 방법을 사용하는 이유는?", a: ["독자가 쉽게 이해하게 하려고", "분량을 늘리려고", "어렵게 만들려고", "실력을 뽐내려고"], correct: 0, exp: "효과적인 정보 전달을 위해서입니다." }
         ],
         3: [
@@ -219,21 +219,28 @@
     let timerInterval;
     let isAnswered = false;
 
-    // 팡파레 효과음 함수
+    // 팡파레 효과음 함수 (미디어 재생으로 인식되도록 보정)
     function playVictorySound() {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // 도, 도, 미, 솔, 높은 도
         const notes = [523.25, 523.25, 659.25, 783.99, 1046.50]; 
         const durations = [0.1, 0.1, 0.1, 0.1, 0.4]; 
         
         notes.forEach((freq, i) => {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
+            
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.15);
+            
+            // 볼륨 설정
             gain.gain.setValueAtTime(0.15, audioCtx.currentTime + i * 0.15);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + i * 0.15 + durations[i]);
+            
             osc.connect(gain);
             gain.connect(audioCtx.destination);
+            
             osc.start(audioCtx.currentTime + i * 0.15);
             osc.stop(audioCtx.currentTime + i * 0.15 + durations[i]);
         });
@@ -331,7 +338,7 @@
         const resultArea = document.getElementById("stage-result");
         resultArea.style.display = "block";
         
-        // 점수 보정: 현재 문제 수(quizData.length)로 나눕니다.
+        // 1. 점수 보정: 실제 문제 수(quizData.length)로 계산
         const finalScore = Math.round((score / quizData.length) * 100);
         document.getElementById("stage-score").innerText = finalScore;
         
@@ -352,7 +359,8 @@
             }
         } else {
             if (isPassed) {
-                playVictorySound(); // 3단계 최종 성공 시 팡파레!
+                // 2. 최종 스테이지 클리어 시 효과음 재생
+                playVictorySound(); 
                 feedback.innerHTML = `<div class="pass-msg">🏁 마스터 챌린지 최종 성공!</div>
                                      <p>총 20문제 중 ${score}문제를 맞췄습니다.<br> 당신은 진정한 국어 마스터!</p>
                                      <div class="reward-box">
