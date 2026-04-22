@@ -256,7 +256,7 @@
                 feedback.innerHTML = `<div class="pass-msg">🎉 스테이지 ${currentStage} 통과!</div><p>15문제 중 ${score}문제를 맞췄습니다. 대단해요!</p>`;
                 actionArea.innerHTML = `<button class="action-btn btn-next-stage" onclick="initStage(${currentStage + 1})">다음 스테이지 도전 →</button>`;
             } else {
-                feedback.innerHTML = `<div class="fail-msg">😢 통과 실패 (${passThreshold}문제 이상 정답 필요)</div><p>현재 점수: ${score}점. 조금 더 노력해봅시다!</p>`;
+                feedback.innerHTML = `<div class="fail-msg">😢 통과 실패 (${passThreshold}문제 이상 정답 필요)</div><p>현재 점수: ${score}개 맞춤. 조금 더 노력해봅시다!</p>`;
                 actionArea.innerHTML = `<button class="action-btn btn-retry" onclick="initStage(${currentStage})">다시 도전하기 🔄</button>`;
             }
         } else {
