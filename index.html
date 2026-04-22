@@ -322,7 +322,7 @@
         document.getElementById("game-area").style.display = "none";
         const resultArea = document.getElementById("stage-result");
         resultArea.style.display = "block";
-        const finalScore = Math.round((score / 15) * 100);
+        const finalScore = Math.round((score / quizdata.length) * 100);
         document.getElementById("stage-score").innerText = finalScore;
         const feedback = document.getElementById("stage-feedback");
         const actionArea = document.getElementById("action-area");
@@ -333,6 +333,7 @@
 
         if (currentStage < 3) {
             if (isPassed) {
+                playVictorySound();
                 feedback.innerHTML = `<div class="pass-msg">🎉 스테이지 ${currentStage} 통과!</div><p>15문제 중 ${score}문제를 맞췄습니다. 대단해요!</p>`;
                 actionArea.innerHTML = `<button class="action-btn btn-next-stage" onclick="initStage(${currentStage + 1})">다음 스테이지 도전 →</button>`;
             } else {
@@ -352,6 +353,31 @@
                 feedback.innerHTML = `<div class="fail-msg">😢 최종 챌린지 실패 (18문제 이상 필요)</div><p>마지막 단계는 정말 어렵죠? 다시 한 번 도전해보세요!</p>`;
                 actionArea.innerHTML = `<button class="action-btn btn-retry" onclick="initStage(${currentStage})">마지막 단계 재도전 🔄</button>`;
             }
+            
+            // 팡파레 효과음을 생성하는 함수
+function playVictorySound() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523.25, 523.25, 659.25, 783.99, 1046.50]; // 도, 도, 미, 솔, 높은도
+    const durations = [0.1, 0.1, 0.1, 0.1, 0.4]; // 음의 길이
+    
+    notes.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'triangle'; // 부드러운 소리
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.15);
+        
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime + i * 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + i * 0.15 + durations[i]);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start(audioCtx.currentTime + i * 0.15);
+        osc.stop(audioCtx.currentTime + i * 0.15 + durations[i]);
+    });
+}
+
         }
     }
 
